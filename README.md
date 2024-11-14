@@ -250,7 +250,3 @@ For any inquiries or support, please contact:
 - **Testing:** Use tools like [Terratest](https://terratest.gruntwork.io/) to automate the testing of your Terraform modules.
 
 ---
-
-Feel free to customize this template further to better suit your project's unique aspects. A well-documented repository not only aids your own understanding but also assists others who may interact with your code in the future.
-
-If you need further customization or additional sections, let me know!
