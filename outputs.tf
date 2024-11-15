@@ -1,31 +1,34 @@
-# outputs.tf
-
 output "vpc_id" {
   description = "The ID of the VPC"
-  value       = module.vpc.vpc_id
+  value       = module.network.vpc_id
 }
 
 output "public_subnet_ids" {
   description = "List of Public Subnet IDs"
-  value       = module.vpc.public_subnet_ids
+  value       = module.network.public_subnet_ids
 }
 
 output "private_subnet_ids" {
   description = "List of Private Subnet IDs"
-  value       = module.vpc.private_subnet_ids
+  value       = module.network.private_subnet_ids
 }
 
 output "internet_gateway_id" {
   description = "The ID of the Internet Gateway"
-  value       = module.vpc.internet_gateway_id
+  value       = module.network.internet_gateway_id
 }
 
 output "public_route_table_id" {
   description = "The ID of the Public Route Table"
-  value       = module.vpc.public_route_table_id
+  value       = module.network.public_route_table_id
 }
 
 output "private_route_table_id" {
   description = "The ID of the Private Route Table"
-  value       = module.vpc.private_route_table_id
+  value       = module.network.private_route_table_id
+}
+
+output "bastion_public_ip" {
+  description = "Public IP of the Bastion Host"
+  value       = module.compute.bastion_public_ip
 }

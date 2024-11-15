@@ -78,4 +78,3 @@ resource "aws_route_table_association" "private_assoc" {
   route_table_id = aws_route_table.private_rt.id
 }
 
-# Note: No NAT Gateway or Elastic IPs are included as per your requirement.
