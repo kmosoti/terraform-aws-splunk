@@ -1,31 +1,19 @@
-# modules/vpc/outputs.tf
-
 output "vpc_id" {
   description = "The ID of the VPC"
-  value       = aws_vpc.main.id
+  value       = module.main_vpc.vpc_id
 }
 
 output "public_subnet_ids" {
-  description = "List of Public Subnet IDs"
-  value       = aws_subnet.public[*].id
+  description = "The IDs of the Public Subnets"
+  value       = module.main_vpc.public_subnet_ids
 }
 
 output "private_subnet_ids" {
-  description = "List of Private Subnet IDs"
-  value       = aws_subnet.private[*].id
+  description = "The IDs of the Private Subnets"
+  value       = module.main_vpc.private_subnet_ids
 }
 
-output "internet_gateway_id" {
-  description = "The ID of the Internet Gateway"
-  value       = aws_internet_gateway.igw.id
-}
-
-output "public_route_table_id" {
-  description = "The ID of the Public Route Table"
-  value       = aws_route_table.public_rt.id
-}
-
-output "private_route_table_id" {
-  description = "The ID of the Private Route Table"
-  value       = aws_route_table.private_rt.id
+output "bastion_sg_id" {
+  description = "The Security Group ID for the Bastion Host"
+  value       = module.bastion_host_sg.bastion_sg_id
 }

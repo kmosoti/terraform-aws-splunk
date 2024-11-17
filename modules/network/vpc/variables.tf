@@ -3,12 +3,6 @@
 variable "project_name" {
   description = "A name to identify resources"
   type        = string
-  default = "terraform-aws-splunk"
-}
-
-variable "your_ip" {
-  description = "Your public IP for SSH access (in CIDR notation)"
-  type        = string
 }
 
 variable "vpc_cidr" {

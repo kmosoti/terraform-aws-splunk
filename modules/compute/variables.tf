@@ -8,6 +8,11 @@ variable "bastion_ami" {
   type        = string
 }
 
+variable "bastion_sg_id" {
+  description = "Security Group ID for Bastion Host"
+  type        = string
+}
+
 variable "instance_type" {
   description = "EC2 instance type for Bastion Host"
   type        = string
@@ -21,11 +26,6 @@ variable "public_subnet_id" {
 
 variable "vpc_id" {
   description = "The ID of the VPC"
-  type        = string
-}
-
-variable "your_ip" {
-  description = "Your public IP for SSH access (in CIDR notation)"
   type        = string
 }
 

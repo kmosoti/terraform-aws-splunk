@@ -4,8 +4,8 @@ variable "project_name" {
 }
 
 variable "vpc_id" {
-  description = "The ID of the VPC"
-  type        = string
+  description = "ID to project VPC"
+  type = string
 }
 
 variable "your_ip" {
