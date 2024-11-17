@@ -1,253 +1,181 @@
-# Terraform AWS Network Modules
-
-![Terraform](https://img.shields.io/badge/Terraform-0.13%2B-blue.svg)
-![AWS](https://img.shields.io/badge/AWS-Enabled-orange.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
-
-## Table of Contents
-
-- [📖 Introduction](#-introduction)
-- [🚀 Features](#-features)
-- [📦 Modules](#-modules)
-- [🔧 Requirements](#-requirements)
-- [🛠️ Usage](#️-usage)
-  - [1. Clone the Repository](#1-clone-the-repository)
-  - [2. Configure Variables](#2-configure-variables)
-  - [3. Initialize Terraform](#3-initialize-terraform)
-  - [4. Plan the Deployment](#4-plan-the-deployment)
-  - [5. Apply the Configuration](#5-apply-the-configuration)
-- [🗂️ Variables](#️-variables)
-- [🔑 Outputs](#-outputs)
-- [📚 Examples](#-examples)
-- [🤝 Contributing](#-contributing)
-- [📜 License](#-license)
-- [📧 Contact](#-contact)
 
 ---
 
-## 📖 Introduction
+# **Terraform Splunk Environment Deployment**
 
-Welcome to the **Terraform AWS Network Modules** repository! This collection of Terraform modules is designed to simplify and standardize the creation and management of AWS networking infrastructure. Whether you're setting up a new project or enhancing an existing one, these modules provide a robust foundation for your Virtual Private Cloud (VPC) configurations.
+![Terraform Logo](https://img.shields.io/badge/Terraform-v1.x-blue) ![AWS Logo](https://img.shields.io/badge/AWS-v5.75.1-orange) ![Splunk Logo](https://img.shields.io/badge/Splunk-Enabler-green) ![SaltStack Logo](https://img.shields.io/badge/SaltStack-Cloud-green)
 
----
-
-## 🚀 Features
-
-- **Modular Design:** Reusable and scalable Terraform modules for AWS networking components.
-- **VPC Configuration:** Customizable VPC setup with public and private subnets.
-- **Security Groups:** Pre-configured security groups for enhanced security.
-- **Internet Gateway:** Seamless integration with AWS Internet Gateway for public access.
-- **No Elastic IPs:** Streamlined setup without the need for Elastic IPs, adhering to your specifications.
-- **Extensible:** Easily extendable to include additional networking components as needed.
+Welcome to the **Terraform Splunk Environment Deployment** repository! This project automates the provisioning of a fully functional Splunk environment on AWS. It uses Terraform for infrastructure provisioning and Salt-Cloud for dynamic resource provisioning and configuration, ensuring a robust and scalable setup for observability and security.
 
 ---
 
-## 📦 Modules
+## **To-Do List**
 
-This repository currently includes the following modules:
+### **Infrastructure Setup**
+- [x] Configure VPC with public and private subnets.
+- [x] Set up Bastion Host for secure SSH access.
+- [ ] **Create Terraform configuration for Salt Master:**
+  - [ ] Deploy Salt Master in a **private subnet**.
+  - [ ] Assign a **security group** with:
+    - [ ] SSH access from the Bastion Host.
+    - [ ] Necessary Salt communication ports (e.g., TCP 4505, 4506).
+  - [ ] Ensure Salt Master is routable via SSH from the Bastion Host.
 
-1. **VPC Module (`modules/vpc`)**
-   - **Description:** Creates an AWS VPC with public and private subnets, Internet Gateway, and Route Tables.
-   - **Submodules:**
-     - **Private Network (VPC)**
-     - **Firewall (Security Groups)**
-     - **Subnets**
-     - **Internet Gateway**
-     - **Route Tables**
-     - **Bastion Host**
+### **SaltStack Configuration**
+- [ ] **Provision Splunk Salt Minions:**
+  - [ ] Use Terraform to create a security group for Minions.
+  - [ ] Pass the security group name to Salt Master’s configuration for inheritance by Minions.
+  - [ ] Configure Salt Master files to provision Splunk components (Indexers, Forwarders).
+- [ ] Write Salt states for:
+  - [ ] Installing Splunk.
+  - [ ] Configuring roles (Indexers, Forwarders).
+  - [ ] Setting up networking and authentication for Splunk.
+
+### **Integration and Scaling**
+- [ ] Automate communication between Terraform and Salt-Cloud.
+- [ ] Enable dynamic scaling for Splunk services.
+- [ ] Add logs and metrics pipelines for Splunk observability.
 
 ---
 
-## 🔧 Requirements
-
-Before using these modules, ensure you have the following installed:
-
-- [Terraform](https://www.terraform.io/downloads.html) **>= 0.13**
-- [AWS CLI](https://aws.amazon.com/cli/) **configured with appropriate credentials**
-- [Git](https://git-scm.com/downloads) **for cloning the repository**
+## **Features**
+- **Terraform Infrastructure as Code (IaC)**:
+  - VPC configuration with public and private subnets.
+  - Security group definitions with fine-tuned access controls.
+  - Bastion host deployment for administrative access.
+- **Salt-Cloud Provisioning and Configuration**:
+  - Instance provisioning within AWS using SaltStack.
+  - Dynamic configuration management with Salt states.
 
 ---
 
-## 🛠️ Usage
+---
 
-Follow these steps to integrate the VPC module into your Terraform project.
+## **Features**
+- **Terraform Infrastructure as Code (IaC)**:
+  - VPC configuration with public and private subnets.
+  - Security group definitions with fine-tuned access controls.
+  - Bastion host deployment for administrative access.
+- **Salt-Cloud Provisioning and Configuration**:
+  - Instance provisioning within AWS using SaltStack.
+  - Dynamic configuration management with Salt states.
 
-### 1. Clone the Repository
+---
 
-```bash
-git clone https://github.com/<your-username>/terraform-aws-network-modules.git
-cd terraform-aws-network-modules
+## **Getting Started**
+
+### **Prerequisites**
+1. [Terraform](https://www.terraform.io/) installed (version >= 1.x).
+2. [SaltStack](https://docs.saltproject.io/) installed with Salt-Cloud.
+3. AWS credentials configured locally (e.g., `~/.aws/credentials`).
+4. A valid AWS Key Pair for EC2 access.
+5. Permissions to manage AWS resources (IAM roles, VPC, EC2, Security Groups, etc.).
+
+---
+
+### **Repository Structure**
+```plaintext
+terraform-aws-splunk/
+│
+├── main.tf                # Top-level entry point
+├── variables.tf           # Input variables
+├── outputs.tf             # Project-level outputs
+├── provider.tf            # AWS provider configuration
+├── LICENSE                # License information
+├── README.md              # Project documentation
+├── .gitignore             # Git exclusions for sensitive files
+│
+├── modules/               # Reusable modules
+│   ├── compute/           # Compute resources (e.g., EC2)
+│   │   └── bastion_host/  # Bastion host configuration
+│   └── network/           # Networking resources
+│       ├── security_groups/ # Security group configurations
+│       └── vpc/             # VPC, subnets, and routing
+│
+└── .terraform/            # Terraform state and cache (auto-generated, ignored by Git)
 ```
 
-### 2. Configure Variables
-
-Create a `terraform.tfvars` file in the root directory with your desired configurations. An example is provided below.
-
-```bash
-cp terraform.tfvars.example terraform.tfvars
-```
-
-Edit `terraform.tfvars` to suit your environment:
-
-```hcl
-# terraform.tfvars
-
-# Project Identification
-project_name = "my-network-project"
-
-# VPC Configuration
-vpc_cidr = "10.0.0.0/16"
-
-# Public Subnets Configuration
-public_subnet_cidrs = [
-  "10.0.1.0/24",  # Public Subnet 1
-  "10.0.2.0/24"   # Public Subnet 2
-]
-
-# Private Subnets Configuration
-private_subnet_cidrs = [
-  "10.0.101.0/24",  # Private Subnet 1
-  "10.0.102.0/24"   # Private Subnet 2
-]
-```
-
-### 3. Initialize Terraform
-
-Initialize the Terraform working directory to download necessary providers and modules.
-
-```bash
-terraform init
-```
-
-### 4. Plan the Deployment
-
-Review the infrastructure changes Terraform will make.
-
-```bash
-terraform plan
-```
-
-### 5. Apply the Configuration
-
-Deploy the infrastructure as defined in your configuration.
-
-```bash
-terraform apply
-```
-
-Type `yes` when prompted to proceed.
-
 ---
 
-## 🗂️ Variables
+### **Configuring Input Variables**
 
-Define and customize your infrastructure using the following variables.
+Terraform variables can be defined in several ways:
+1. **Directly in the `variables.tf` file**: This file declares variables that can be assigned values via the CLI or environment variables.
+2. **Using `.tfvars` files (local use only)**: Since `.tfvars` files are ignored by Git (see `.gitignore`), they are a secure way to store sensitive data locally without risking exposure in version control. An example `terraform.tfvars` file might look like this:
 
-| Variable Name          | Description                                     | Type       | Default           |
-| ---------------------- | ----------------------------------------------- | ---------- | ----------------- |
-| `project_name`         | A name to identify resources                    | `string`   | `"my-network-project"` |
-| `vpc_cidr`             | CIDR block for the VPC                          | `string`   | `"10.0.0.0/16"`   |
-| `public_subnet_cidrs`  | List of CIDR blocks for public subnets           | `list(string)` | `["10.0.1.0/24", "10.0.2.0/24"]` |
-| `private_subnet_cidrs` | List of CIDR blocks for private subnets          | `list(string)` | `["10.0.101.0/24", "10.0.102.0/24"]` |
-
-*Add more variables as needed based on your module configurations.*
-
----
-
-## 🔑 Outputs
-
-Access essential information about your infrastructure through these outputs.
-
-| Output Name          | Description                     |
-| -------------------- | ------------------------------- |
-| `vpc_id`             | The ID of the created VPC        |
-| `public_subnet_ids`  | List of Public Subnet IDs        |
-| `private_subnet_ids` | List of Private Subnet IDs       |
-| `internet_gateway_id`| The ID of the Internet Gateway   |
-| `public_route_table_id` | The ID of the Public Route Table |
-| `private_route_table_id` | The ID of the Private Route Table |
-
-*Outputs can be extended based on additional resources.*
-
----
-
-## 📚 Examples
-
-### Basic Usage
-
-Here's a basic example of how to use the VPC module in your Terraform project.
-
-```hcl
-module "vpc" {
-  source = "./modules/vpc"
-
-  project_name         = var.project_name
-  vpc_cidr             = var.vpc_cidr
-  public_subnet_cidrs  = var.public_subnet_cidrs
-  private_subnet_cidrs = var.private_subnet_cidrs
-}
-```
-
-### Advanced Usage
-
-For more advanced configurations, including integrating the Bastion Host or additional security settings, refer to the [examples](./examples) directory.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! If you'd like to contribute to this repository, please follow these steps:
-
-1. **Fork the Repository**
-
-2. **Create a Feature Branch**
-
-   ```bash
-   git checkout -b feature/YourFeatureName
+   ```plaintext
+   project_name         = "splunk-environment"
+   vpc_cidr             = "10.0.0.0/16"
+   public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
+   private_subnet_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
+   your_ip              = "203.0.113.1/32"
+   bastion_ami          = "ami-0c02fb55956c7d316"
+   instance_type        = "t3.micro"
+   key_pair_name        = "your-key-pair-name"
    ```
 
-3. **Commit Your Changes**
+   > **Note**: These files are local to your environment and should not be committed to version control.
 
+3. **Command-line input**: Pass variables directly when running Terraform commands:
    ```bash
-   git commit -m "Add Your Feature"
+   terraform apply -var="project_name=splunk-environment" -var="vpc_cidr=10.0.0.0/16"
    ```
 
-4. **Push to the Branch**
+---
 
+### **Sensitive Files and Exclusions**
+
+The `.gitignore` file is configured to exclude:
+- `.tfvars` files: These often contain sensitive data like passwords, private keys, or API keys and should remain local.
+- `.terraform` directory: Stores Terraform's local state and provider plugins, which can be regenerated.
+- `*.tfstate` files: Contains the current state of your infrastructure and may include sensitive information.
+- Private keys (`*.pem`): Ensure that sensitive credentials are not accidentally added to version control.
+
+> For collaboration, provide a `variables.tf` file with descriptions of required variables so others can configure their environment securely.
+
+---
+
+## **How to Use**
+
+#### **Step 1: Deploy Infrastructure with Terraform**
+1. Initialize Terraform:
    ```bash
-   git push origin feature/YourFeatureName
+   terraform init
+   ```
+2. Validate the configuration:
+   ```bash
+   terraform validate
+   ```
+3. Plan the infrastructure:
+   ```bash
+   terraform plan
+   ```
+4. Deploy the resources:
+   ```bash
+   terraform apply
    ```
 
-5. **Open a Pull Request**
-
-Please ensure your code adheres to the project's coding standards and includes relevant tests.
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+#### **Step 2: Provision and Configure Resources with Salt-Cloud**
+Refer to the **Salt-Cloud Setup** section for configuring and deploying AWS resources dynamically.
 
 ---
 
-## 📧 Contact
-
-For any inquiries or support, please contact:
-
-- **Name:** Your Name
-- **Email:** your.email@example.com
-- **LinkedIn:** [Your LinkedIn Profile](https://www.linkedin.com/in/yourprofile)
-- **GitHub:** [Your GitHub Username](https://github.com/yourusername)
+### **Future Enhancements**
+1. Automate Splunk installation and configuration with Salt states.
+2. Extend the setup to deploy Splunk forwarders and indexers.
+3. Add integration pipelines for logs and metrics ingestion.
+4. Scale infrastructure dynamically based on workload.
 
 ---
 
-## 💡 Tips & Best Practices
-
-- **Version Control:** Always use version control for your Terraform configurations to track changes and collaborate effectively.
-- **State Management:** Consider using remote backends like AWS S3 with DynamoDB for state locking to manage your Terraform state securely.
-- **Security:** Avoid hardcoding sensitive information. Use Terraform's [sensitive variables](https://www.terraform.io/language/values/variables#sensitive-variables) or AWS Secrets Manager for managing secrets.
-- **Documentation:** Keep your `README.md` and inline code comments updated to reflect the current state of your infrastructure.
-- **Testing:** Use tools like [Terratest](https://terratest.gruntwork.io/) to automate the testing of your Terraform modules.
+## **Resources**
+- [Terraform Documentation](https://www.terraform.io/docs)
+- [AWS Documentation](https://docs.aws.amazon.com/)
+- [SaltStack Documentation](https://docs.saltproject.io/)
 
 ---
 
+## **License**
+This project is licensed under the [MIT License](LICENSE).
+
+---
