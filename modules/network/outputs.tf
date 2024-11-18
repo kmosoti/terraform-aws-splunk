@@ -15,5 +15,10 @@ output "private_subnet_ids" {
 
 output "bastion_sg_id" {
   description = "The Security Group ID for the Bastion Host"
-  value       = module.bastion_host_sg.bastion_sg_id
+  value       = module.security_groups.bastion_sg_id
+}
+
+output "salt_master_sg_id" {
+  description = "The Security Group ID for Salt Master"
+  value = module.security_groups.salt_master_sg_id
 }

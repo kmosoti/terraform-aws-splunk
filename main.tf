@@ -8,12 +8,16 @@ module "network" {
 }
 
 module "compute" {
-  source          = "./modules/compute"
-  project_name    = var.project_name
-  bastion_ami     = var.bastion_ami
-  instance_type   = var.instance_type
-  public_subnet_id = module.network.public_subnet_ids[0] 
-  vpc_id          = module.network.vpc_id                
-  key_pair_name   = var.key_pair_name
-  bastion_sg_id   = module.network.bastion_sg_id         
+  source            = "./modules/compute"
+  project_name      = var.project_name
+  bastion_ami       = var.bastion_ami
+  instance_type     = var.instance_type
+  public_subnet_id  = module.network.public_subnet_ids[0]
+  private_subnet_id = module.network.private_subnet_ids[0]
+  vpc_id            = module.network.vpc_id
+  key_pair_name     = var.key_pair_name
+  bastion_sg_id     = module.network.bastion_sg_id
+  salt_master_sg_id = module.network.salt_master_sg_id
+
+  depends_on = [module.network]
 }

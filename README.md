@@ -36,6 +36,9 @@ Welcome to the **Terraform Splunk Environment Deployment** repository! This proj
 - [ ] Enable dynamic scaling for Splunk services.
 - [ ] Add logs and metrics pipelines for Splunk observability.
 
+### **QOL Stuff**
+- [ ] Refactor for default_tags config block instead. Reduce repeated code like name tags and environment (prod,devtest) etc...
+
 ---
 
 ## **Features**

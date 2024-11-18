@@ -5,10 +5,10 @@ module "main_vpc" {
   vpc_cidr = var.vpc_cidr
 }
 
-module "bastion_host_sg" {
-  source = "./security_groups"
+module "security_groups" {
+  source = "./security_groups/"
 
-  project_name      = var.project_name
+  project_name = var.project_name
   your_ip = var.your_ip
   vpc_id = module.main_vpc.vpc_id
 }

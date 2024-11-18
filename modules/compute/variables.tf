@@ -13,6 +13,11 @@ variable "bastion_sg_id" {
   type        = string
 }
 
+variable "salt_master_sg_id" {
+  description = "Security Group ID for Salt Master"
+  type = string
+}
+
 variable "instance_type" {
   description = "EC2 instance type for Bastion Host"
   type        = string
@@ -20,6 +25,11 @@ variable "instance_type" {
 }
 
 variable "public_subnet_id" {
+  description = "Public Subnet ID for Bastion Host"
+  type        = string
+}
+
+variable "private_subnet_id" {
   description = "Public Subnet ID for Bastion Host"
   type        = string
 }
