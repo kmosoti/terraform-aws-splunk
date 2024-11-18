@@ -14,16 +14,15 @@ Welcome to the **Terraform Splunk Environment Deployment** repository! This proj
 ### **Infrastructure Setup**
 - [x] Configure VPC with public and private subnets.
 - [x] Set up Bastion Host for secure SSH access.
-- [ ] **Create Terraform configuration for Salt Master:**
-  - [ ] Deploy Salt Master in a **private subnet**.
-  - [ ] Assign a **security group** with:
-    - [ ] SSH access from the Bastion Host.
-    - [ ] Necessary Salt communication ports (e.g., TCP 4505, 4506).
-  - [ ] Ensure Salt Master is routable via SSH from the Bastion Host.
+- [x] **Create Terraform configuration for Salt Master:**
+  - [x] Deploy Salt Master in a **private subnet**.
+  - [x] Assign a **security group** with:
+    - [x] SSH access from the Bastion Host.
+    - [x] Necessary Salt communication ports (e.g., TCP 4505, 4506).
 
 ### **SaltStack Configuration**
 - [ ] **Provision Splunk Salt Minions:**
-  - [ ] Use Terraform to create a security group for Minions.
+  - [x] Use Terraform to create a security group for Minions.
   - [ ] Pass the security group name to Salt Master’s configuration for inheritance by Minions.
   - [ ] Configure Salt Master files to provision Splunk components (Indexers, Forwarders).
 - [ ] Write Salt states for:
@@ -39,7 +38,6 @@ Welcome to the **Terraform Splunk Environment Deployment** repository! This proj
 ### **QOL Stuff**
 - [ ] Refactor for default_tags config block instead. Reduce repeated code like name tags and environment (prod,devtest) etc...
 
----
 
 ## **Features**
 - **Terraform Infrastructure as Code (IaC)**:
@@ -49,30 +47,6 @@ Welcome to the **Terraform Splunk Environment Deployment** repository! This proj
 - **Salt-Cloud Provisioning and Configuration**:
   - Instance provisioning within AWS using SaltStack.
   - Dynamic configuration management with Salt states.
-
----
-
----
-
-## **Features**
-- **Terraform Infrastructure as Code (IaC)**:
-  - VPC configuration with public and private subnets.
-  - Security group definitions with fine-tuned access controls.
-  - Bastion host deployment for administrative access.
-- **Salt-Cloud Provisioning and Configuration**:
-  - Instance provisioning within AWS using SaltStack.
-  - Dynamic configuration management with Salt states.
-
----
-
-## **Getting Started**
-
-### **Prerequisites**
-1. [Terraform](https://www.terraform.io/) installed (version >= 1.x).
-2. [SaltStack](https://docs.saltproject.io/) installed with Salt-Cloud.
-3. AWS credentials configured locally (e.g., `~/.aws/credentials`).
-4. A valid AWS Key Pair for EC2 access.
-5. Permissions to manage AWS resources (IAM roles, VPC, EC2, Security Groups, etc.).
 
 ---
 
@@ -98,6 +72,127 @@ terraform-aws-splunk/
 └── .terraform/            # Terraform state and cache (auto-generated, ignored by Git)
 ```
 
+---
+
+## **Getting Started**
+
+### **Prerequisites**
+1. [Terraform](https://www.terraform.io/) installed (version >= 1.x).
+2. [SaltStack](https://docs.saltproject.io/) installed with Salt-Cloud.
+3. AWS credentials configured locally (e.g., `~/.aws/credentials`).
+4. A valid AWS Key Pair for EC2 access.
+5. Permissions to manage AWS resources (IAM roles, VPC, EC2, Security Groups, etc.).
+
+### **Setting Up AWS CLI**
+
+1. **Install AWS CLI:**
+   - Follow the [official AWS CLI installation guide](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) for your operating system.
+
+2. **Configure AWS CLI with Access Keys:**
+   - Open your terminal or command prompt.
+   - Run the following command and enter your AWS Access Key ID, Secret Access Key, default region, and output format when prompted:
+     ```bash
+     aws configure
+     ```
+   - This will set up your AWS credentials in `~/.aws/credentials` and configuration in `~/.aws/config`.
+
+### **Connecting to the Bastion Host**
+
+1. **Retrieve Bastion Host Public IP:**
+   - After deploying the infrastructure with Terraform, note the Bastion Host's public IP from the Terraform output.
+
+2. **Connect via SSH:**
+   - Use the following command to SSH into the Bastion Host:
+     ```bash
+     ssh -i /path/to/your/key-pair.pem ec2-user@<bastion_public_ip>
+     ```
+   - **Replace:**
+     - `/path/to/your/key-pair.pem` with the path to your AWS Key Pair `.pem` file.
+     - `<bastion_public_ip>` with the actual public IP address of your Bastion Host.
+
+### **Connecting to the Salt Master**
+
+1. **SSH from Bastion Host to Salt Master:**
+   - Once connected to the Bastion Host, use SSH to access the Salt Master using its private IP:
+     ```bash
+     ssh -i /path/to/your/key-pair.pem ec2-user@<salt_master_private_ip>
+     ```
+   - **Replace:**
+     - `<salt_master_private_ip>` with the Salt Master's private IP address from the Terraform output.
+
+2. **Verify Salt Master Connection:**
+   - Ensure that you can run Salt commands and that the Salt Master is operational:
+     ```bash
+     sudo systemctl status salt-master
+     ```
+   - You should see that the Salt Master service is **active** and **running**.
+
+---
+
+### **Example Workflow:**
+
+1. **Initialize and Apply Terraform Configuration:**
+   ```bash
+   terraform init
+   terraform apply
+   ```
+   - Review and confirm the changes when prompted.
+
+2. **Set Up AWS CLI:**
+   ```bash
+   aws configure
+   ```
+   - Enter your AWS credentials and preferred settings.
+
+3. **Connect to Bastion Host:**
+   ```bash
+   ssh -i ~/keys/my-key-pair.pem ec2-user@54.123.45.67
+   ```
+   - Replace the path and IP with your actual key pair location and Bastion Host IP.
+
+4. **Connect to Salt Master from Bastion Host:**
+   ```bash
+   ssh -i ~/keys/my-key-pair.pem ec2-user@10.0.3.45
+   ```
+   - Replace the IP with your Salt Master's private IP.
+
+5. **Verify Salt Master Status:**
+   ```bash
+   sudo systemctl status salt-master
+   ```
+   - Ensure the service is running as expected.
+
+---
+
+### **Tips:**
+
+- **SSH Key Permissions:**
+  - Ensure your `.pem` file has the correct permissions to be used by SSH:
+    ```bash
+    chmod 400 /path/to/your/key-pair.pem
+    ```
+
+- **SSH Config (Optional):**
+  - To simplify SSH commands, consider configuring your `~/.ssh/config` file:
+    ```plaintext
+    Host bastion
+        HostName <bastion_public_ip>
+        User ec2-user
+        IdentityFile /path/to/your/key-pair.pem
+
+    Host salt-master
+        HostName <salt_master_private_ip>
+        User ec2-user
+        IdentityFile /path/to/your/key-pair.pem
+        ProxyJump bastion
+    ```
+  - This allows you to connect to the Salt Master using:
+    ```bash
+    ssh salt-master
+    ```
+
+- **Ensure Scripts Have Correct Line Endings:**
+  - If you're on Windows, ensure your `salt_master_bootstrap_install.sh` script uses Unix-style line endings (LF) to prevent execution issues on Linux instances.
 ---
 
 ### **Configuring Input Variables**
